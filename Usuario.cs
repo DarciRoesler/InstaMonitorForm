@@ -21,6 +21,11 @@
 
         public override string ToString()
         {
+            return Nome;
+        }
+
+        public string RegistroBanco()
+        {
             return Nome + ";" + EuSigo + ";" + MeSegue + "/";
         }
     }

@@ -15,7 +15,12 @@
 
         public override string ToString()
         {
-            return Usuario.Nome + ";" + Status.ToString() + ";" + DateTime.ToString("d") + "/";
+            return DateTime.ToString("d") + " - " + Usuario.Nome + " - " + Status;
+        }
+
+        public string RegistroBanco()
+        {
+            return Usuario.Nome + ";" + Status.ToString() + ";" + DateTime.ToString("d") + "~";
         }
     }
 }

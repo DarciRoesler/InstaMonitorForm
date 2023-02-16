@@ -2,6 +2,12 @@ namespace InstaMonitorForm
 {
     public partial class HomeFrm : Form
     {
+        // Declaração das listas
+        List<Usuario> usuarios = new List<Usuario>();
+        List<Update> updates = new List<Update>();
+        List<string> seguindo = new List<string>();
+        List<string> seguidores = new List<string>();
+
         public HomeFrm()
         {
             InitializeComponent();
@@ -9,11 +15,6 @@ namespace InstaMonitorForm
 
         private void AtualizarBtn_Click(object sender, EventArgs e)
         {
-            // Declaração das listas
-            List<Usuario> usuarios = new List<Usuario>();
-            List<Update> updates = new List<Update>();
-            List<string> seguindo = new List<string>();
-            List<string> seguidores = new List<string>();
 
             // Identificação do diretório local
             string path = @"c:\InstaMonitor";
@@ -81,7 +82,7 @@ namespace InstaMonitorForm
 
             // Faz a leitura dos registros de Updates já existentes
             string updatesBase = File.ReadAllText(arquivoUpdates);
-            string[] splitUpdates = updatesBase.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] splitUpdates = updatesBase.Split(new[] { "~" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string update in splitUpdates)
             {
                 string[] info = update.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -121,14 +122,14 @@ namespace InstaMonitorForm
             string? usuariostxt = null;
             foreach (Usuario usuario in usuarios)
             {
-                usuariostxt += usuario.ToString();
+                usuariostxt += usuario.RegistroBanco();
             }
 
             // Cria o txt que será enviado ao arquivo de updates
             string? updatestxt = null;
             foreach (Update update in updates)
             {
-                updatestxt += update.ToString();
+                updatestxt += update.RegistroBanco();
             }
 
             // Grava os dados nos arquivos
@@ -136,6 +137,50 @@ namespace InstaMonitorForm
             File.WriteAllText(arquivoUpdates, updatestxt);
             File.WriteAllLines(arquivoSeguindo, seguindo);
             File.WriteAllLines(arquivoSeguidores, seguidores);
+
+            this.AtualizarBtn.Enabled = false;
+            this.AtualizarBtn.Text = "Atualizado";
+
+            this.SeguindoLstBx.DataSource = usuarios.Where(x => x.EuSigo).ToList();
+            this.SeguindoLstBx.Refresh();
+
+            this.SeguidoresLstBx.DataSource = usuarios.Where(x => x.MeSegue).ToList();
+            this.SeguidoresLstBx.Refresh();
+
+            this.NaoSigoLstBx.DataSource = usuarios.Where(x => !x.EuSigo && x.MeSegue).ToList();
+            this.SeguidoresLstBx.Refresh();
+
+            this.NaoSeguemLstBx.DataSource = usuarios.Where(x => x.EuSigo && !x.MeSegue).ToList();
+            this.NaoSeguemLstBx.Refresh();
+        }
+
+        private void SeguindoLstBx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.NomeUsuarioLbl.Text = this.SeguindoLstBx.SelectedValue.ToString();
+            this.HistoricoLstBx.DataSource = updates.Where(x => x.Usuario.Nome == this.SeguindoLstBx.SelectedValue.ToString()).ToList();
+        }
+
+        private void SeguidoresLstBx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.NomeUsuarioLbl.Text = this.SeguidoresLstBx.SelectedValue.ToString();
+            this.HistoricoLstBx.DataSource = updates.Where(x => x.Usuario.Nome == this.SeguidoresLstBx.SelectedValue.ToString()).ToList();
+        }
+        private void NaoSigoLstBx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.NomeUsuarioLbl.Text = this.NaoSigoLstBx.SelectedValue.ToString();
+            this.HistoricoLstBx.DataSource = updates.Where(x => x.Usuario.Nome == this.NaoSigoLstBx.SelectedValue.ToString()).ToList();
+        }
+
+        private void NaoSeguemLstBx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.NomeUsuarioLbl.Text = this.NaoSeguemLstBx.SelectedValue.ToString();
+            this.HistoricoLstBx.DataSource = updates.Where(x => x.Usuario.Nome == this.NaoSeguemLstBx.SelectedValue.ToString()).ToList();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            this.HistoricoLstBx.DataSource = updates.Where(x => x.DateTime == this.DataDtp.Value.Date).ToList();
+            this.NomeUsuarioLbl.Text = "______________";
         }
     }
 }
