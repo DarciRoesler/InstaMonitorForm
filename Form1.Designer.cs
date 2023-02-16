@@ -28,13 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.AtualizarBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // AtualizarBtn
+            // 
+            this.AtualizarBtn.Location = new System.Drawing.Point(12, 12);
+            this.AtualizarBtn.Name = "AtualizarBtn";
+            this.AtualizarBtn.Size = new System.Drawing.Size(75, 23);
+            this.AtualizarBtn.TabIndex = 0;
+            this.AtualizarBtn.Text = "Atualizar";
+            this.AtualizarBtn.UseVisualStyleBackColor = true;
+            this.AtualizarBtn.Click += new System.EventHandler(this.AtualizarBtn_Click);
             // 
             // HomeFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 361);
+            this.Controls.Add(this.AtualizarBtn);
             this.Name = "HomeFrm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InstaMonitor";
@@ -43,5 +55,7 @@
         }
 
         #endregion
+
+        private Button AtualizarBtn;
     }
 }
