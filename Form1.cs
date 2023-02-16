@@ -1,8 +1,8 @@
 namespace InstaMonitorForm
 {
-    public partial class Form1 : Form
+    public partial class HomeFrm : Form
     {
-        public Form1()
+        public HomeFrm()
         {
             InitializeComponent();
         }
